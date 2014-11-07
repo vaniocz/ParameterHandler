@@ -1,11 +1,13 @@
 <?php
-
 namespace Incenteev\ParameterHandler;
 
+if (!class_exists('Nette\Neon\Neon')) {
+    // @TODO: looks like composer can't handle classmap inside script handler?
+    require(__DIR__ . '/../../../../nette/neon/src/neon.php');
+}
+
 use Composer\IO\IOInterface;
-use Symfony\Component\Yaml\Inline;
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Yaml;
+use Nette\Neon\Neon;
 
 class Processor
 {
@@ -25,13 +27,12 @@ class Processor
 
         $exists = is_file($realFile);
 
-        $yamlParser = new Parser();
-
         $action = $exists ? 'Updating' : 'Creating';
         $this->io->write(sprintf('<info>%s the "%s" file</info>', $action, $realFile));
 
         // Find the expected params
-        $expectedValues = $yamlParser->parse(file_get_contents($config['dist-file']));
+        $expectedValues = Neon::decode(file_get_contents($config['dist-file']));
+
         if (!isset($expectedValues[$parameterKey])) {
             throw new \InvalidArgumentException(sprintf('The top-level key %s is missing.', $parameterKey));
         }
@@ -44,7 +45,7 @@ class Processor
             array($parameterKey => array())
         );
         if ($exists) {
-            $existingValues = $yamlParser->parse(file_get_contents($realFile));
+            $existingValues = Neon::decode(file_get_contents($realFile));
             if ($existingValues === null) {
                 $existingValues = array();
             }
@@ -60,7 +61,7 @@ class Processor
             mkdir($dir, 0755, true);
         }
 
-        file_put_contents($realFile, "# This file is auto-generated during the composer install\n" . Yaml::dump($actualValues, 99));
+        file_put_contents($realFile, "# This file is auto-generated during the composer install\n" . Neon::encode($actualValues, Neon::BLOCK));
     }
 
     private function processConfig(array $config)
@@ -156,10 +157,10 @@ class Processor
                 $this->io->write('<comment>Some parameters are missing. Please provide them.</comment>');
             }
 
-            $default = Inline::dump($message);
+            $default = Neon::encode($message);
             $value = $this->io->ask(sprintf('<question>%s</question> (<comment>%s</comment>): ', $key, $default), $default);
 
-            $actualParams[$key] = Inline::parse($value);
+            $actualParams[$key] = Neon::decode($value);
         }
 
         return $actualParams;

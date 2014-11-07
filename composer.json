@@ -1,18 +1,22 @@
 {
     "name": "incenteev/composer-parameter-handler",
-    "description": "Composer script handling your ignored parameter file",
+    "description": "Composer script handling your ignored parameter NEON file",
     "keywords": ["parameters management"],
-    "homepage": "https://github.com/Incenteev/ParameterHandler",
+    "homepage": "https://github.com/vaniocz/ParameterHandler",
     "license": "MIT",
     "authors": [
         {
             "name": "Christophe Coevoet",
             "email": "stof@notk.org"
+        },
+        {
+            "name": "Marek Štípek",
+            "email": "mario.dweller@seznam.cz"
         }
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/yaml": "~2.0"
+        "nette/neon": "~2.3@dev"
     },
     "require-dev": {
         "composer/composer": "1.0.*@dev",
@@ -20,12 +24,7 @@
         "symfony/filesystem": "~2.2"
     },
     "autoload": {
-        "psr-0": { "Incenteev\\ParameterHandler": "" }
+        "psr-0": { "Vaniocz\\ParameterHandler": "" }
     },
-    "target-dir": "Incenteev/ParameterHandler",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.1.x-dev"
-        }
-    }
+    "target-dir": "Vaniocz/ParameterHandler"
 }
