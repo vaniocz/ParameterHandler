@@ -33,7 +33,7 @@ class Processor
         // Find the expected params
         $expectedValues = Neon::decode(file_get_contents($config['dist-file']));
 
-        if (!isset($expectedValues[$parameterKey])) {
+        if (!array_key_exists($parameterKey, $expectedValues)) {
             throw new \InvalidArgumentException(sprintf('The top-level key %s is missing.', $parameterKey));
         }
         $expectedParams = (array) $expectedValues[$parameterKey];
