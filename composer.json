@@ -24,7 +24,7 @@
         "symfony/filesystem": "~2.2"
     },
     "autoload": {
-        "psr-0": { "Vaniocz\\ParameterHandler": "" }
+        "psr-0": { "Incenteev\\ParameterHandler": "" }
     },
-    "target-dir": "Vaniocz/ParameterHandler"
+    "target-dir": "Incenteev/ParameterHandler"
 }
